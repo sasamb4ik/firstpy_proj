@@ -7,9 +7,11 @@
 Ваша задача: съесть все точки на карте, избегая монстров. При контакте с монстрами вы умираете. Если вы съедаете большую точку, вы можете убивать монстров, а также они замедляются. Всего у вас есть 3 жизни. Если игра закончена, нажмите пробел для перезапуска.
 
 ![You lost!](https://github.com/sasamb4ik/firstpy_proj/blob/dev/pacman/images/lose.png)
-![alt text](https://ltdfoto.ru/image/i1ofgj)
 
-![alt text](https://ltdfoto.ru/image/i1obBV)
+![You lost!](https://github.com/sasamb4ik/firstpy_proj/blob/dev/pacman/images/playing.png)
+
+![You lost!](https://github.com/sasamb4ik/firstpy_proj/blob/dev/pacman/images/win.png)
+
 
 ### Установка
 
