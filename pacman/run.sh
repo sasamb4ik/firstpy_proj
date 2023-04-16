@@ -1,3 +1,3 @@
 #!/bin/bash
 cd src
-python3 main.py
+python3 pacman.py
