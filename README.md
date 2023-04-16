@@ -18,7 +18,7 @@
 1) Клонируйте этот репозиторий, с помощью команды
 
 ```
-git@github.com:sasamb4ik/firstpy_proj.git
+git clone git@github.com:sasamb4ik/firstpy_proj.git
 ```
 
 2) Чтобы игра была установлена в папку 'pacman', запустите скрипт установки 'install.sh'
