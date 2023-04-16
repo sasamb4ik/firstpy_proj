@@ -1,4 +1,4 @@
-from varsandimports import *
+from globals import *
 def basic():
     global startup_counter, powerup, power_counter, player_x, player_y, direction, direction_command, blinky_x, blinky_y, \
     blinky_direction, inky_x, inky_y, inky_direction, pinky_x, pinky_y, pinky_direction, clyde_x, clyde_y, clyde_direction, \
