@@ -23,6 +23,7 @@ git clone git@github.com:sasamb4ik/firstpy_proj.git
 
 2) Чтобы игра была установлена в папку 'pacman', запустите скрипт установки 'install.sh'
 ```
+cd firstpy_proj
 cd pacman
 chmod +x install.sh
 ./install.sh
