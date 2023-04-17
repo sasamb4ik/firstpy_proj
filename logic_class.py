@@ -7,6 +7,10 @@ from enemy_class import *
 pygame.init()
 vec = pygame.math.Vector2
 
+# музыка
+pygame.mixer.init()
+pygame.mixer.music.load('pacman.mp3')
+pygame.mixer.music.play(-1, 0.0)
 
 class Logic:
     def __init__(self):
@@ -25,6 +29,7 @@ class Logic:
         self.load()
         self.player = Player(self, vec(self.p_pos))
         self.make_enemies()
+        self.to_win = 0
 
     def run(self):
         while self.running:
@@ -37,15 +42,18 @@ class Logic:
                 self.playing_update()
                 self.playing_draw()
             elif self.state == 'game over':
-                self.game_over_events()
+                self.game_end_events()
                 self.game_over_update()
                 self.game_over_draw()
+            elif self.state == 'game won':
+                self.game_end_events()
+                self.game_won_update()
+                self.game_won_draw()
             else:
                 self.running = False
             self.clock.tick(FPS)
         pygame.quit()
         sys.exit()
-
 
     def draw_text(self, words, screen, pos, size, colour, font_name, centered=False):
         font = pygame.font.SysFont(font_name, size)
@@ -77,6 +85,8 @@ class Logic:
                     elif char == "B":
                         pygame.draw.rect(self.background, BLACK, (xidx*self.cell_width, yidx*self.cell_height,
                                                                   self.cell_width, self.cell_height))
+        buf = self.coins
+        self.to_win = len(buf)
 
     def make_enemies(self):
         for idx, pos in enumerate(self.e_pos):
@@ -147,6 +157,9 @@ class Logic:
 
     def playing_update(self):
         # Обновить состояние игроков и врагов
+        buf = self.coins
+        if self.to_win == len(buf):
+            self.state = 'game won'
         self.player.update()
         for enemy in self.enemies:
             enemy.update()
@@ -210,7 +223,7 @@ class Logic:
                                (int(bonus.x*self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
                                 int(bonus.y*self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2), 7)
 
-    def game_over_events(self):
+    def game_end_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -222,11 +235,25 @@ class Logic:
     def game_over_update(self):
         pass
 
+    def game_won_update(self):
+        pass
+
     def game_over_draw(self):
         self.screen.fill(BLACK)
         quit_text = "Нажмите ESC чтобы выйти"
         again_text = "Нажмите SPACE чтобы играть снова"
         self.draw_text("GAME OVER", self.screen, [WIDTH//2, 100],  52, RED, "arial", centered=True)
+        self.draw_text(again_text, self.screen, [
+                       WIDTH//2, HEIGHT//2],  36, (190, 190, 190), "arial", centered=True)
+        self.draw_text(quit_text, self.screen, [
+                       WIDTH//2, HEIGHT//1.5],  36, (190, 190, 190), "arial", centered=True)
+        pygame.display.update()
+
+    def game_won_draw(self):
+        self.screen.fill(BLACK)
+        quit_text = "Нажмите ESC чтобы выйти"
+        again_text = "Нажмите SPACE чтобы играть снова"
+        self.draw_text("GAME WON", self.screen, [WIDTH//2, 100],  52, GREEN, "arial", centered=True)
         self.draw_text(again_text, self.screen, [
                        WIDTH//2, HEIGHT//2],  36, (190, 190, 190), "arial", centered=True)
         self.draw_text(quit_text, self.screen, [
