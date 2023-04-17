@@ -9,7 +9,7 @@ vec = pygame.math.Vector2
 
 # музыка
 pygame.mixer.init()
-pygame.mixer.music.load('../stuff/pacman.mp3')
+pygame.mixer.music.load('../data/pacman.mp3')
 pygame.mixer.music.play(-1, 0.0)
 
 class Logic:
@@ -65,11 +65,11 @@ class Logic:
         screen.blit(text, pos)
 
     def load(self):
-        self.background = pygame.image.load('../stuff/map.png')
+        self.background = pygame.image.load('../data/map.png')
         self.background = pygame.transform.scale(self.background, (MAP_WIDTH, MAP_HEIGHT))
 
 
-        with open("../stuff/map.txt", 'r') as file:
+        with open("../data/map.txt", 'r') as file:
             for yidx, line in enumerate(file):
                 for xidx, char in enumerate(line):
                     if char == "1":
