@@ -14,7 +14,11 @@ class Player:
         self.able_to_move = True
         self.current_score = 0
         self.speed = 2
+<<<<<<< HEAD
         self.lives = 5
+=======
+        self.lives = 3
+>>>>>>> 5531239 (1st attempt)
         self.bonusTimer = 0
 
     def update(self):
