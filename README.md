@@ -1,16 +1,16 @@
-# PACMAN игра
+# PACMAN mitimalistic & music style
 
 
 
 ## Игроку
 
-Ваша задача: съесть все точки на карте, избегая монстров. При контакте с монстрами вы умираете. Если вы съедаете большую точку, вы можете убивать монстров, а также они замедляются. Всего у вас есть 3 жизни. Если игра закончена, нажмите пробел для перезапуска.
+Это минималистичный Pacman, который позволит вам погрузиться в атмосферу зарождения компьютерных игр и первых приставок. Вы - точка цветы охры внизу карты. Монстры - это оранжевая, голубая, желтая, синяя точки. Вам нужно съесть все белые точки. Если вы съедаете розовую точку, монстры начнут убегать от вас и вы сможете есть их.
 
-![You lost!](https://github.com/sasamb4ik/firstpy_proj/blob/dev/pacman/images/lose.png)
+![You lost!](https://github.com/sasamb4ik/firstpy_proj/blob/dev/images/lose.png)
 
-![You lost!](https://github.com/sasamb4ik/firstpy_proj/blob/dev/pacman/images/playing.png)
+![You lost!](https://github.com/sasamb4ik/firstpy_proj/blob/dev/images/plyaing.png)
 
-![You lost!](https://github.com/sasamb4ik/firstpy_proj/blob/dev/pacman/images/win.png)
+![You lost!](https://github.com/sasamb4ik/firstpy_proj/blob/dev/images/won.png)
 
 
 ### Установка
