@@ -113,7 +113,7 @@ class Logic:
 
         self.coins = []
         self.bonus = []
-        with open("../stuff/map.txt", 'r') as file:
+        with open("../data/map.txt", 'r') as file:
             for yidx, line in enumerate(file):
                 for xidx, char in enumerate(line):
                     if char == 'C':
