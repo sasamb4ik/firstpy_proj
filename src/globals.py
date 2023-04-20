@@ -9,11 +9,18 @@ COLS = 28
 
 # цвета
 BLACK = (0, 0, 0)
-RED = (208, 22, 22)
+RED = (189, 29, 29)
+light_gray = (200, 200, 200)
 GREY = (107, 107, 107)
-PINK = (255, 0, 127)
+PINK = (255, 51, 153)
+BLUE = (0, 255, 255)
+ORANGE = (255, 128, 0)
+GOLDEN = (255, 255, 153)
 WHITE = (255, 255, 255)
-PLAYER_COLOUR = (190, 194, 15)
+GREEN = (5, 255, 38)
+START = (153, 153, 0)
+BONUS = (102, 102, 0)
+PLAYER_COLOUR = (255, 255, 0)
 
 # фон
 START_TEXT_SIZE = 16

@@ -2,6 +2,7 @@ import pygame
 import sys
 from player_class import *
 from enemy_class import *
+import json
 
 
 pygame.init()
@@ -30,6 +31,8 @@ class Logic:
         self.player = Player(self, vec(self.p_pos))
         self.make_enemies()
         self.to_win = 0
+        self.is_blinking = False
+        self.frames = 0
 
     def run(self):
         while self.running:
@@ -122,25 +125,6 @@ class Logic:
                         self.bonus.append(vec(xidx, yidx))
         self.state = "playing"
 
-    def start_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                self.state = 'playing'
-
-    def start_update(self):
-        pass
-
-    def start_draw(self):
-        self.screen.fill(BLACK)
-        self.draw_text('Нажмите пробел', self.screen, [
-                       WIDTH//2, HEIGHT//2-50], START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
-        self.draw_text('Лучший счёт', self.screen, [4, 0],
-                       START_TEXT_SIZE, (255, 255, 255), START_FONT)
-        pygame.display.update()
-
-
     def playing_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -155,6 +139,24 @@ class Logic:
                 if event.key == pygame.K_DOWN:
                     self.player.move(vec(0, 1))
 
+    def start_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.state = 'playing'
+
+    def start_update(self):
+        pass
+
+    def start_draw(self):
+        self.screen.fill(BLACK)
+        self.draw_text('Нажмите пробел', self.screen, [
+                       WIDTH//2, HEIGHT//2-50], START_TEXT_SIZE, START, START_FONT, centered=True)
+        self.draw_text('Лучший счёт', self.screen, [4, 0],
+                       START_TEXT_SIZE, WHITE, START_FONT)
+        pygame.display.update()
+
     def playing_update(self):
         # Обновить состояние игроков и врагов
         buf = self.coins
@@ -167,14 +169,14 @@ class Logic:
         # Проверить на столкновение с врагами
         for enemy in self.enemies:
             if enemy.grid_pos == self.player.grid_pos:
-                if self.player.bonusTimer < 0:
+                if shared.bonusTimer < 0:
                     self.remove_life()
                 else:
                     idx = enemy.number
                     self.enemies.remove(enemy)
                     self.enemies.append(Enemy(self, vec(14, 15), idx))
 
-        target_focus = vec(14, 15) if self.player.bonusTimer > 0 else self.player.grid_pos
+        target_focus = vec(14, 15) if shared.bonusTimer > 0 else self.player.grid_pos
         for enemy in self.enemies:
             enemy.targetFocus = target_focus
 
@@ -188,7 +190,7 @@ class Logic:
         self.draw_bonus()
 
         score_text = f"Счёт сейчас: {self.player.current_score}"
-        best_score_text = "Лучший счёт: 0"
+        best_score_text = f"Лучший счёт: {self.player.best_score}"
         self.draw_text(score_text, self.screen, [60, 0], 18, WHITE, START_FONT)
         self.draw_text(best_score_text, self.screen, [WIDTH // 2 + 60, 0], 18, WHITE, START_FONT)
 
@@ -213,13 +215,13 @@ class Logic:
 
     def draw_coins(self):
         for coin in self.coins:
-            pygame.draw.circle(self.screen, (255, 255, 204),
+            pygame.draw.circle(self.screen, GOLDEN,
                                (int(coin.x * self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
                                 int(coin.y * self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2), 5)
 
     def draw_bonus(self):
         for bonus in self.bonus:
-            pygame.draw.circle(self.screen, (255, 0, 127),
+            pygame.draw.circle(self.screen, BONUS,
                                (int(bonus.x*self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
                                 int(bonus.y*self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2), 7)
 
@@ -247,6 +249,8 @@ class Logic:
                        WIDTH//2, HEIGHT//2],  36, (190, 190, 190), "arial", centered=True)
         self.draw_text(quit_text, self.screen, [
                        WIDTH//2, HEIGHT//1.5],  36, (190, 190, 190), "arial", centered=True)
+        with open('../data/best_score.json', 'w') as file:
+            json.dump(self.player.best_score, file)
         pygame.display.update()
 
     def game_won_draw(self):
@@ -258,4 +262,6 @@ class Logic:
                        WIDTH//2, HEIGHT//2],  36, (190, 190, 190), "arial", centered=True)
         self.draw_text(quit_text, self.screen, [
                        WIDTH//2, HEIGHT//1.5],  36, (190, 190, 190), "arial", centered=True)
+        with open('../data/best_score.json', 'w') as file:
+            json.dump(self.player.best_score, file)
         pygame.display.update()

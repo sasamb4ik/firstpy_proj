@@ -1,9 +1,10 @@
 import pygame
 import random
+from player_class import Player
 from globals import *
+import shared
 
 vec = pygame.math.Vector2
-
 
 class Enemy:
     def __init__(self, app, pos, number):
@@ -22,7 +23,6 @@ class Enemy:
 
     def update(self):
         self.target = self.set_target()
-
         if self.target != self.grid_pos:
             self.pix_pos += self.direction * self.speed
 
@@ -39,6 +39,7 @@ class Enemy:
         self.grid_pos[1] = y // cell_height + 1
 
     def draw(self):
+        self.colour = self.set_colour()
         pygame.draw.circle(self.app.screen, self.colour,
                            (int(self.pix_pos.x), int(self.pix_pos.y)), self.radius)
 
@@ -153,14 +154,11 @@ class Enemy:
                    self.app.cell_height // 2)
 
     def set_colour(self):
-        if self.number == 0:
-            return (43, 78, 203)
-        if self.number == 1:
-            return (255, 255, 0)
-        if self.number == 2:
-            return (189, 29, 29)
-        if self.number == 3:
-            return (255, 128, 0)
+        if shared.bonusTimer > 0 and (shared.bonusTimer * 100) % 50 < 25:
+            colors = [(109, 109, 240), (153, 0, 76), (242, 155, 145), (102, 51, 0)]
+        else:
+            colors = [BLUE, PINK, RED, ORANGE]
+        return colors[self.number]
 
     def set_personality(self):
         if self.number == 0:
