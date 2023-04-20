@@ -1,6 +1,7 @@
 import pygame
 import json
 from globals import *
+
 vec = pygame.math.Vector2
 import shared
 
@@ -83,7 +84,6 @@ class Player:
         for x in range(self.lives):
             pygame.draw.circle(self.app.screen, PLAYER_COLOUR, (30 + 20 * x, HEIGHT - 15), 7)
 
-
     def on_coin(self):
         if self.grid_pos in self.app.coins:
             if int(self.pix_pos.x + TOP_BOTTOM // 2) % self.app.cell_width == 0:
@@ -119,9 +119,7 @@ class Player:
             self.best_score = self.current_score
 
     def get_pix_pos(self):
-        return vec((self.grid_pos[0] * self.app.cell_width) + TOP_BOTTOM // 2 + self.app.cell_width // 2,
-                   (self.grid_pos[1] * self.app.cell_height) +
-                   TOP_BOTTOM // 2 + self.app.cell_height // 2)
-
-
-
+        x_pos = (self.grid_pos[0] * self.app.cell_width)
+        y_pos = (self.grid_pos[1] * self.app.cell_height)
+        return vec(x_pos + TOP_BOTTOM // 2 + self.app.cell_width // 2,
+                   y_pos + TOP_BOTTOM // 2 + self.app.cell_height // 2)
