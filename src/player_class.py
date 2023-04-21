@@ -69,20 +69,23 @@ class Player:
 
     def time_to_move(self):
         if int(self.pix_pos.x + TOP_BOTTOM // 2) % self.app.cell_width == 0:
-            if self.direction == vec(1, 0) or self.direction == vec(-1, 0) or self.direction == vec(0, 0):
+            if self.direction == vec(1, 0) or self.direction == vec(-1,
+                                                                    0) or self.direction == vec(0, 0):
                 return True
         if int(self.pix_pos.y + TOP_BOTTOM // 2) % self.app.cell_height == 0:
-            if self.direction == vec(0, 1) or self.direction == vec(0, -1) or self.direction == vec(0, 0):
+            if self.direction == vec(0, 1) or self.direction == vec(0,
+                                                                    -1) or self.direction == vec(0, 0):
                 return True
         return False
 
     def draw(self):
         pygame.draw.circle(self.app.screen, PLAYER_COLOUR, (int(self.pix_pos.x),
-                                                            int(self.pix_pos.y)), self.app.cell_width // 2 - 2)
-
+                                                            int(self.pix_pos.y)),
+                           self.app.cell_width // 2 - 2)
         # Drawing player lives
         for x in range(self.lives):
-            pygame.draw.circle(self.app.screen, PLAYER_COLOUR, (30 + 20 * x, HEIGHT - 15), 7)
+            pygame.draw.circle(self.app.screen, PLAYER_COLOUR,
+                               (30 + 20 * x, HEIGHT - 15), 7)
 
     def on_coin(self):
         if self.grid_pos in self.app.coins:
