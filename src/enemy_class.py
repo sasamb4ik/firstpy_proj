@@ -1,6 +1,5 @@
 import pygame
 import random
-from player_class import Player
 from globals import *
 import shared
 
@@ -42,7 +41,8 @@ class Enemy:
     def draw(self):
         self.colour = self.set_colour()
         pygame.draw.circle(self.app.screen, self.colour,
-                           (int(self.pix_pos.x), int(self.pix_pos.y)), self.radius)
+                           (int(self.pix_pos.x), int(self.pix_pos.y)),
+                           self.radius)
 
     def set_speed(self):
         if self.personality in ["speedy", "scared"]:
@@ -55,21 +55,30 @@ class Enemy:
         if self.personality == "speedy" or self.personality == "slow":
             return self.targetFocus
         else:
-            if self.app.player.grid_pos[0] > COLS // 2 and self.app.player.grid_pos[1] > ROWS // 2:
-                return [self.app.player.grid_pos[0], self.app.player.grid_pos[1]]
-            if self.app.player.grid_pos[0] > COLS // 2 and self.app.player.grid_pos[1] < ROWS // 2:
-                return [self.app.player.grid_pos[0], self.app.player.grid_pos[1]]
-            if self.app.player.grid_pos[0] < COLS // 2 and self.app.player.grid_pos[1] > ROWS // 2:
+            if self.app.player.grid_pos[0] > COLS // 2 and \
+                    self.app.player.grid_pos[1] > ROWS // 2:
+                return [self.app.player.grid_pos[0],
+                        self.app.player.grid_pos[1]]
+            if self.app.player.grid_pos[0] > COLS // 2 and \
+                    self.app.player.grid_pos[1] < ROWS // 2:
+                return [self.app.player.grid_pos[0],
+                        self.app.player.grid_pos[1]]
+            if self.app.player.grid_pos[0] < COLS // 2 and \
+                    self.app.player.grid_pos[1] > ROWS // 2:
                 return vec(COLS - 2, 1)
             else:
                 return vec(COLS - 2, ROWS - 2)
 
     def time_to_move(self):
         if int(self.pix_pos.x + TOP_BOTTOM // 2) % self.app.cell_width == 0:
-            if self.direction == vec(1, 0) or self.direction == vec(-1, 0) or self.direction == vec(0, 0):
+            if self.direction == vec(1, 0) or self.direction == vec(-1,
+                                                                    0) or self.direction == vec(
+                    0, 0):
                 return True
         if int(self.pix_pos.y + TOP_BOTTOM // 2) % self.app.cell_height == 0:
-            if self.direction == vec(0, 1) or self.direction == vec(0, -1) or self.direction == vec(0, 0):
+            if self.direction == vec(0, 1) or self.direction == vec(0,
+                                                                    -1) or self.direction == vec(
+                    0, 0):
                 return True
         return False
 
@@ -158,7 +167,7 @@ class Enemy:
 
     def set_colour(self):
         if shared.bonusTimer > 0 and (shared.bonusTimer * 100) % 50 < 25:
-            colors = [(109, 109, 240), (153, 0, 76), (242, 155, 145), (102, 51, 0)]
+            colors = [BLINKY_BLUE, BLINKY_PINK, BLINKY_RED, BLINKY_ORANGE]
         else:
             colors = [BLUE, PINK, RED, ORANGE]
         return colors[self.number]
