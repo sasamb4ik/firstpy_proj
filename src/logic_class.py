@@ -88,8 +88,8 @@ class Logic:
                         self.e_pos.append([xidx, yidx])
                     elif char == "B":
                         pygame.draw.rect(self.background, BLACK, (
-                        xidx * self.cell_width, yidx * self.cell_height,
-                        self.cell_width, self.cell_height))
+                            xidx * self.cell_width, yidx * self.cell_height,
+                            self.cell_width, self.cell_height))
         buf = self.coins
         self.to_win = len(buf)
 
@@ -222,16 +222,16 @@ class Logic:
         for coin in self.coins:
             pygame.draw.circle(self.screen, GOLDEN,
                                (
-                               int(coin.x * self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
-                               int(coin.y * self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2),
+                                   int(coin.x * self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
+                                   int(coin.y * self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2),
                                5)
 
     def draw_bonus(self):
         for bonus in self.bonus:
             pygame.draw.circle(self.screen, BONUS,
                                (
-                               int(bonus.x * self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
-                               int(bonus.y * self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2),
+                                   int(bonus.x * self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
+                                   int(bonus.y * self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2),
                                7)
 
     def game_end_events(self):
