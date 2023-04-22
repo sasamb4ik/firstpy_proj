@@ -85,7 +85,7 @@ class Player:
         # Drawing player lives
         for x in range(self.lives):
             pygame.draw.circle(self.app.screen, PLAYER_COLOUR,
-                               (30 + 20 * x, HEIGHT - 15), 7)
+                               (30 + 20 * x, HEIGHT - 15), RADIUS)
 
     def on_coin(self):
         if self.grid_pos in self.app.coins:
@@ -117,7 +117,7 @@ class Player:
 
     def eat_bonus(self):
         self.app.bonus.remove(self.grid_pos)
-        self.current_score += 100
+        self.current_score += BIG_BONUS
         if self.current_score > self.best_score:
             self.best_score = self.current_score
 
