@@ -58,8 +58,7 @@ class Logic:
         pygame.quit()
         sys.exit()
 
-    def draw_text(self, words, screen, pos, size, colour, font_name,
-                  centered=False):
+    def draw_text(self, words, screen, pos, size, colour, font_name, centered=False):
         font = pygame.font.SysFont(font_name, size)
         text = font.render(words, False, colour)
         text_size = text.get_size()
@@ -70,8 +69,7 @@ class Logic:
 
     def load(self):
         self.background = pygame.image.load('../data/map.png')
-        self.background = pygame.transform.scale(self.background,
-                                                 (MAP_WIDTH, MAP_HEIGHT))
+        self.background = pygame.transform.scale(self.background, (MAP_WIDTH, MAP_HEIGHT))
 
         with open("../data/map.txt", 'r') as file:
             for yidx, line in enumerate(file):
@@ -87,9 +85,8 @@ class Logic:
                     elif char in ["2", "3", "4", "5"]:
                         self.e_pos.append([xidx, yidx])
                     elif char == "B":
-                        pygame.draw.rect(self.background, BLACK, (
-                            xidx * self.cell_width, yidx * self.cell_height,
-                            self.cell_width, self.cell_height))
+                        pygame.draw.rect(self.background, BLACK, (xidx * self.cell_width, yidx * self.cell_height,
+                                                                  self.cell_width, self.cell_height))
         buf = self.coins
         self.to_win = len(buf)
 
@@ -130,6 +127,8 @@ class Logic:
     def playing_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                with open('../data/best_score.json', 'w') as file:
+                    json.dump(self.player.current_score, file)
                 self.running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -154,8 +153,7 @@ class Logic:
     def start_draw(self):
         self.screen.fill(BLACK)
         self.draw_text('Нажмите пробел', self.screen, [
-            WIDTH // 2, HEIGHT // 2 - 50], START_TEXT_SIZE, START, START_FONT,
-                       centered=True)
+            WIDTH // 2, HEIGHT // 2 - (LEFT_COORD - 10)], START_TEXT_SIZE, START, START_FONT, centered=True)
         self.draw_text('Лучший счёт', self.screen, [4, 0],
                        START_TEXT_SIZE, WHITE, START_FONT)
         pygame.display.update()
@@ -163,6 +161,8 @@ class Logic:
     def playing_update(self):
         # Обновить состояние игроков и врагов
         buf = self.coins
+        with open('../data/best_score.json', 'r') as file:
+            self.player.best_score = json.load(file)
         if self.to_win == len(buf):
             self.state = 'game won'
         self.player.update()
@@ -179,8 +179,7 @@ class Logic:
                     self.enemies.remove(enemy)
                     self.enemies.append(Enemy(self, vec(14, 15), idx))
 
-        target_focus = vec(14,
-                           15) if shared.bonusTimer > 0 else self.player.grid_pos
+        target_focus = vec(14, 15) if shared.bonusTimer > 0 else self.player.grid_pos
         for enemy in self.enemies:
             enemy.targetFocus = target_focus
 
@@ -195,9 +194,8 @@ class Logic:
 
         score_text = f"Счёт сейчас: {self.player.current_score}"
         best_score_text = f"Лучший счёт: {self.player.best_score}"
-        self.draw_text(score_text, self.screen, [60, 0], 18, WHITE, START_FONT)
-        self.draw_text(best_score_text, self.screen, [WIDTH // 2 + 60, 0], 18,
-                       WHITE, START_FONT)
+        self.draw_text(score_text, self.screen, [LEFT_COORD, 0], POSITION_TEXT // 2, WHITE, START_FONT)
+        self.draw_text(best_score_text, self.screen, [WIDTH // 2 + LEFT_COORD, 0], POSITION_TEXT // 2, WHITE, START_FONT)
 
         self.player.draw()
         for enemy in self.enemies:
@@ -221,18 +219,14 @@ class Logic:
     def draw_coins(self):
         for coin in self.coins:
             pygame.draw.circle(self.screen, GOLDEN,
-                               (
-                                   int(coin.x * self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
-                                   int(coin.y * self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2),
-                               5)
+                               (int(coin.x * self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
+                                int(coin.y * self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2), 5)
 
     def draw_bonus(self):
         for bonus in self.bonus:
             pygame.draw.circle(self.screen, BONUS,
-                               (
-                                   int(bonus.x * self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
-                                   int(bonus.y * self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2),
-                               7)
+                               (int(bonus.x * self.cell_width) + self.cell_width // 2 + TOP_BOTTOM // 2,
+                                int(bonus.y * self.cell_height) + self.cell_height // 2 + TOP_BOTTOM // 2), 7)
 
     def game_end_events(self):
         for event in pygame.event.get():
@@ -253,12 +247,11 @@ class Logic:
         self.screen.fill(BLACK)
         quit_text = "Нажмите ESC чтобы выйти"
         again_text = "Нажмите SPACE чтобы играть снова"
-        self.draw_text("GAME OVER", self.screen, [WIDTH // 2, 100], 52, RED,
-                       "arial", centered=True)
+        self.draw_text("GAME OVER", self.screen, [WIDTH // 2, HEIGHT_Y], POSITION_RESULT, RED, "arial", centered=True)
         self.draw_text(again_text, self.screen, [
-            WIDTH // 2, HEIGHT // 2], 36, light_gray, "arial", centered=True)
+            WIDTH // 2, HEIGHT // 2], POSITION_TEXT, PRINT_COLOR, "arial", centered=True)
         self.draw_text(quit_text, self.screen, [
-            WIDTH // 2, HEIGHT // 1.5], 36, light_gray, "arial", centered=True)
+            WIDTH // 2, HEIGHT // 1.5], POSITION_TEXT, PRINT_COLOR, "arial", centered=True)
         with open('../data/best_score.json', 'w') as file:
             json.dump(self.player.best_score, file)
         pygame.display.update()
@@ -267,12 +260,11 @@ class Logic:
         self.screen.fill(BLACK)
         quit_text = "Нажмите ESC чтобы выйти"
         again_text = "Нажмите SPACE чтобы играть снова"
-        self.draw_text("GAME WON", self.screen, [WIDTH // 2, 100], 52, GREEN,
-                       "arial", centered=True)
+        self.draw_text("GAME WON", self.screen, [WIDTH // 2, HEIGHT_Y], POSITION_RESULT, GREEN, "arial", centered=True)
         self.draw_text(again_text, self.screen, [
-            WIDTH // 2, HEIGHT // 2], 36, light_gray, "arial", centered=True)
+            WIDTH // 2, HEIGHT // 2], POSITION_TEXT, PRINT_COLOR, "arial", centered=True)
         self.draw_text(quit_text, self.screen, [
-            WIDTH // 2, HEIGHT // 1.5], 36, light_gray, "arial", centered=True)
+            WIDTH // 2, HEIGHT // 1.5], POSITION_TEXT, PRINT_COLOR, "arial", centered=True)
         with open('../data/best_score.json', 'w') as file:
             json.dump(self.player.best_score, file)
         pygame.display.update()
