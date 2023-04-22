@@ -2,6 +2,7 @@ import pygame
 import random
 from globals import *
 import shared
+from abc import ABC, abstractmethod
 
 vec = pygame.math.Vector2
 
@@ -38,6 +39,17 @@ class Enemy:
         self.grid_pos[0] = x // cell_width + 1
         self.grid_pos[1] = y // cell_height + 1
 
+    @abstractmethod
+    def move(self):
+        if self.personality == "random":
+            self.direction = self.get_random_direction()
+        if self.personality == "slow":
+            self.direction = self.get_path_direction(self.target)
+        if self.personality == "speedy":
+            self.direction = self.get_path_direction(self.target)
+        if self.personality == "scared":
+            self.direction = self.get_path_direction(self.target)
+
     def draw(self):
         self.colour = self.set_colour()
         pygame.draw.circle(self.app.screen, self.colour,
@@ -52,45 +64,31 @@ class Enemy:
         return speed
 
     def set_target(self):
-        if self.personality == "speedy" or self.personality == "slow":
+        if self.personality in ["speedy", "slow"]:
             return self.targetFocus
         else:
-            if self.app.player.grid_pos[0] > COLS // 2 and \
-                    self.app.player.grid_pos[1] > ROWS // 2:
-                return [self.app.player.grid_pos[0],
-                        self.app.player.grid_pos[1]]
-            if self.app.player.grid_pos[0] > COLS // 2 and \
-                    self.app.player.grid_pos[1] < ROWS // 2:
-                return [self.app.player.grid_pos[0],
-                        self.app.player.grid_pos[1]]
-            if self.app.player.grid_pos[0] < COLS // 2 and \
-                    self.app.player.grid_pos[1] > ROWS // 2:
+            player_pos = self.app.player.grid_pos
+            if player_pos[0] > COLS // 2 and player_pos[1] > ROWS // 2:
+                return [player_pos[0], player_pos[1]]
+            if player_pos[0] > COLS // 2 and player_pos[1] < ROWS // 2:
+                return [player_pos[0], player_pos[1]]
+            if player_pos[0] < COLS // 2 and player_pos[1] > ROWS // 2:
                 return vec(COLS - 2, 1)
             else:
                 return vec(COLS - 2, ROWS - 2)
 
     def time_to_move(self):
-        if int(self.pix_pos.x + TOP_BOTTOM // 2) % self.app.cell_width == 0:
-            if self.direction == vec(1, 0) or self.direction == vec(-1,
-                                                                    0) or self.direction == vec(
-                    0, 0):
-                return True
-        if int(self.pix_pos.y + TOP_BOTTOM // 2) % self.app.cell_height == 0:
-            if self.direction == vec(0, 1) or self.direction == vec(0,
-                                                                    -1) or self.direction == vec(
-                    0, 0):
-                return True
+        if (int(self.pix_pos.x + TOP_BOTTOM // 2) % self.app.cell_width == 0
+                and (self.direction == vec(1, 0) or self.direction == vec(-1,
+                                                                          0) or self.direction == vec(
+                    0, 0))):
+            return True
+        if (int(self.pix_pos.y + TOP_BOTTOM // 2) % self.app.cell_height == 0
+                and (self.direction == vec(0, 1) or self.direction == vec(0,
+                                                                          -1) or self.direction == vec(
+                    0, 0))):
+            return True
         return False
-
-    def move(self):
-        if self.personality == "random":
-            self.direction = self.get_random_direction()
-        if self.personality == "slow":
-            self.direction = self.get_path_direction(self.target)
-        if self.personality == "speedy":
-            self.direction = self.get_path_direction(self.target)
-        if self.personality == "scared":
-            self.direction = self.get_path_direction(self.target)
 
     def get_path_direction(self, target):
         next_cell = self.find_next_cell_in_path(target)
